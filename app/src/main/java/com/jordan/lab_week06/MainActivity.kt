@@ -2,6 +2,7 @@ package com.jordan.lab_week06
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,7 +18,12 @@ class MainActivity : AppCompatActivity() {
     }
     private val catAdapter by lazy {
         //Glide is used here to load the images
-        CatAdapter(layoutInflater, GlideImageLoader(this))
+        //Here we are passing the onClickListener function to the Adapter
+        CatAdapter(layoutInflater, GlideImageLoader(this), object:
+            CatAdapter.OnClickListener {
+            //When this is triggered, the pop up dialog will be shown
+            override fun onItemClick(cat: CatModel) = showSelectionDialog(cat)
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,5 +66,14 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         )
+    }
+    private fun showSelectionDialog(cat: CatModel) {
+        AlertDialog.Builder(this)
+
+            .setTitle("Cat Selected")
+
+            .setMessage("You have selected cat ${cat.name}")
+
+            .setPositiveButton("OK") { _, _ -> }.show()
     }
 }
